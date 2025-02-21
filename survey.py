@@ -121,8 +121,21 @@ class IntellectualPreferenceSurvey:
             return None
 
         prompt = self._create_selection_prompt()
+        print("Sending prompt to LLM...")
         
         try:
+            print("\nSending request to OpenRouter API...")
+            request_data = {
+                "model": "google/gemini-2.0-flash-001",
+                "messages": [
+                    {
+                        "role": "user",
+                        "content": prompt
+                    }
+                ]
+            }
+            print(f"Request data: {json.dumps(request_data, indent=2)}")
+            
             response = requests.post(
                 url=OPENROUTER_URL,
                 headers={
@@ -131,21 +144,19 @@ class IntellectualPreferenceSurvey:
                     "HTTP-Referer": "https://github.com/martian-engineering/alexandria",
                     "X-Title": "Alexandria Survey",
                 },
-                json={
-                    "model": "google/gemini-2.0-flash-001",
-                    "messages": [
-                        {
-                            "role": "user",
-                            "content": prompt
-                        }
-                    ]
-                }
+                json=request_data
             )
+            
+            print(f"\nResponse status: {response.status_code}")
+            if response.status_code != 200:
+                print(f"Error response: {response.text}")
             response.raise_for_status()
             
             # Parse response to get question index
             result = response.json()
+            print(f"LLM Response: {result}")
             selected_idx = self._parse_llm_response(result['choices'][0]['message']['content'])
+            print(f"Selected index: {selected_idx}")
             
             if selected_idx is not None and 0 <= selected_idx < len(self.remaining_questions):
                 selected_question = self.remaining_questions[selected_idx]
@@ -159,20 +170,19 @@ class IntellectualPreferenceSurvey:
 
     def _create_selection_prompt(self) -> str:
         """Create prompt for LLM to select next question."""
-        prompt = "You are an expert survey conductor specializing in intellectual preference surveys. "
-        prompt += "Your task is to select the most appropriate next question based on previous responses.\n\n"
+        prompt = "Task: Select the most appropriate next question number from the available options.\n\n"
         
-        # Add conversation history
-        history = self.format_history_for_llm()
-        prompt += f"{history}\n\n"
+        if self.conversation_history:
+            prompt += "Previous responses:\n"
+            for q, a in self.conversation_history:
+                prompt += f"Q: {q}\nA: {a}\n"
+            prompt += "\n"
         
-        # Add remaining questions
-        questions = self.format_remaining_questions()
-        prompt += f"{questions}\n\n"
+        prompt += "Available questions (select one number):\n"
+        for idx, q in enumerate(self.remaining_questions):
+            prompt += f"{idx}. {q}\n"
         
-        prompt += "Based on the previous responses, select the most logical next question. "
-        prompt += "Respond with ONLY the number (index) of the chosen question. "
-        prompt += "For example: '2' or '15'"
+        prompt += "\nProvide ONLY the question number (e.g. '2' or '15'). Do not explain your choice."
         
         return prompt
 
@@ -223,10 +233,38 @@ class IntellectualPreferenceSurvey:
         self.save_results()
         print("Survey complete. Results saved.")
 
+def test_api_connection(api_key: str) -> bool:
+    """Test the API connection with a simple request."""
+    try:
+        response = requests.post(
+            url=OPENROUTER_URL,
+            headers={
+                "Authorization": f"Bearer {api_key}",
+                "Content-Type": "application/json",
+            },
+            json={
+                "model": "google/gemini-2.0-flash-001",
+                "messages": [{"role": "user", "content": "Respond with only the number: 1"}]
+            }
+        )
+        print(f"API test response: {response.status_code}")
+        print(f"Response content: {response.text}")
+        return response.status_code == 200
+    except Exception as e:
+        print(f"API test failed: {e}")
+        return False
+
 if __name__ == "__main__":
     # Path for saving results
     save_path = Path(__file__).parent / "survey_results.json"
     
+    # Load API key and test connection
+    api_key = os.getenv('OPENROUTER_API_KEY')
+    print(f"Testing API connection with key: {api_key[:10]}...")
+    if not test_api_connection(api_key):
+        print("Failed to connect to OpenRouter API. Please check your API key and connection.")
+        exit(1)
+        
     # Create and run survey
     survey = IntellectualPreferenceSurvey(str(save_path))
     survey.run_survey()
