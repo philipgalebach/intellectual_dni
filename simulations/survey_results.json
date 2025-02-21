@@ -1,0 +1,177 @@
+[
+  {
+    "timestamp": "20250220_234416",
+    "responses": [
+      {
+        "question": "Is doubt part of authentic faith?",
+        "answer": "yes"
+      },
+      {
+        "question": "Can sacred texts contain errors?",
+        "answer": "yes"
+      },
+      {
+        "question": "Can multiple religions all be true?",
+        "answer": "no"
+      },
+      {
+        "question": "Does evil disprove a perfect God?",
+        "answer": "no"
+      },
+      {
+        "question": "Can reason alone lead us to religious truth?",
+        "answer": "no"
+      }
+    ]
+  },
+  {
+    "timestamp": "20250220_234425",
+    "responses": [
+      {
+        "question": "Is doubt part of authentic faith?",
+        "answer": "no"
+      },
+      {
+        "question": "Does evil disprove a perfect God?",
+        "answer": "no"
+      },
+      {
+        "question": "Does genuine free will exist?",
+        "answer": "yes"
+      },
+      {
+        "question": "Can reason alone lead us to religious truth?",
+        "answer": "yes"
+      },
+      {
+        "question": "Can multiple religions all be true?",
+        "answer": "no"
+      }
+    ]
+  },
+  {
+    "timestamp": "20250220_234600",
+    "responses": [
+      {
+        "question": "If you could prove or disprove God's existence, would you want to know?",
+        "answer": "no"
+      },
+      {
+        "question": "Does divine hiddenness matter?",
+        "answer": "no"
+      },
+      {
+        "question": "Does evil disprove a perfect God?",
+        "answer": "no"
+      },
+      {
+        "question": "Does genuine free will exist?",
+        "answer": "yes"
+      },
+      {
+        "question": "Is there purpose in evolution?",
+        "answer": "yes"
+      }
+    ]
+  },
+  {
+    "timestamp": "20250220_234606",
+    "responses": [
+      {
+        "question": "Is doubt part of authentic faith?",
+        "answer": "yes"
+      },
+      {
+        "question": "Can sacred texts contain errors?",
+        "answer": "no"
+      },
+      {
+        "question": "Can miracles violate natural law?",
+        "answer": "yes"
+      },
+      {
+        "question": "Does evil disprove a perfect God?",
+        "answer": "yes"
+      },
+      {
+        "question": "Does genuine free will exist?",
+        "answer": "yes"
+      }
+    ]
+  },
+  {
+    "timestamp": "20250220_234614",
+    "responses": [
+      {
+        "question": "Is doubt part of authentic faith?",
+        "answer": "yes"
+      },
+      {
+        "question": "Should faith seek understanding?",
+        "answer": "no"
+      },
+      {
+        "question": "Can reason alone lead us to religious truth?",
+        "answer": "no"
+      },
+      {
+        "question": "Is divine revelation necessary for moral knowledge?",
+        "answer": "yes"
+      },
+      {
+        "question": "Can multiple religions all be true?",
+        "answer": "yes"
+      }
+    ]
+  },
+  {
+    "timestamp": "20250220_234624",
+    "responses": [
+      {
+        "question": "Is the universe itself divine?",
+        "answer": "no"
+      },
+      {
+        "question": "Does evil disprove a perfect God?",
+        "answer": "no"
+      },
+      {
+        "question": "Does genuine free will exist?",
+        "answer": "no"
+      },
+      {
+        "question": "Can reason alone lead us to religious truth?",
+        "answer": "no"
+      },
+      {
+        "question": "Is divine revelation necessary for moral knowledge?",
+        "answer": "yes"
+      }
+    ]
+  },
+  {
+    "timestamp": "20250220_234633",
+    "responses": [
+      {
+        "question": "Is doubt part of authentic faith?",
+        "answer": "no"
+      },
+      {
+        "question": "Does evil disprove a perfect God?",
+        "answer": "no"
+      },
+      {
+        "question": "Is divine revelation necessary for moral knowledge?",
+        "answer": "yes"
+      },
+      {
+        "question": "Can reason alone lead us to religious truth?",
+        "answer": "no"
+      },
+      {
+        "question": "Can sacred texts contain errors?",
+        "answer": "no"
+      }
+    ]
+  }
+]

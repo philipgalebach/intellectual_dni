@@ -97,12 +97,12 @@ class IntellectualPreferenceSurvey:
         return formatted
 
     def save_results(self) -> None:
-        """Save survey results to JSON file with timestamp."""
+        """Save survey results by appending to a single JSON file."""
         from datetime import datetime
         
         # Create results with timestamp
         timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
-        results = {
+        new_result = {
             "timestamp": timestamp,
             "responses": [
                 {"question": q, "answer": a} 
@@ -111,16 +111,24 @@ class IntellectualPreferenceSurvey:
         }
         
         # Ensure simulations directory exists
-        simulations_dir = self.save_path.parent / "simulations"
+        simulations_dir = self.save_path.parent
         simulations_dir.mkdir(parents=True, exist_ok=True)
         
-        # Create filename with timestamp
-        filename = f"survey_results_{timestamp}.json"
-        save_path = simulations_dir / filename
+        # Load existing results or create new list
+        existing_results = []
+        if self.save_path.exists():
+            with open(self.save_path, 'r') as f:
+                try:
+                    existing_results = json.load(f)
+                except json.JSONDecodeError:
+                    existing_results = []
         
-        # Save results
-        with open(save_path, 'w') as f:
-            json.dump(results, f, indent=2)
+        # Append new results
+        existing_results.append(new_result)
+        
+        # Save updated results
+        with open(self.save_path, 'w') as f:
+            json.dump(existing_results, f, indent=2)
 
     def is_complete(self) -> bool:
         """Check if survey is complete (5 questions asked)."""
@@ -249,6 +257,11 @@ class IntellectualPreferenceSurvey:
         self.save_results()
         print("Survey complete. Results saved.")
 
+        # Reset survey state for potential reuse
+        self.remaining_questions = QUESTION_BANK.copy()
+        self.conversation_history = []
+        self.question_count = 0
+
 def test_api_connection(api_key: str) -> bool:
     """Test the API connection with a simple request."""
     try:
@@ -281,7 +294,13 @@ if __name__ == "__main__":
     if not test_api_connection(api_key):
         print("Failed to connect to OpenRouter API. Please check your API key and connection.")
         exit(1)
+    
+    # Get number of runs from command line argument or use default
+    import sys
+    num_runs = int(sys.argv[1]) if len(sys.argv) > 1 else 1
         
-    # Create and run survey
+    # Create and run survey multiple times
     survey = IntellectualPreferenceSurvey(str(save_path))
-    survey.run_survey()
+    for run in range(num_runs):
+        print(f"\nStarting survey run {run + 1}/{num_runs}")
+        survey.run_survey()
