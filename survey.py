@@ -97,13 +97,29 @@ class IntellectualPreferenceSurvey:
         return formatted
 
     def save_results(self) -> None:
-        """Save survey results to JSON file."""
-        results = [
-            {"question": q, "answer": a} 
-            for q, a in self.conversation_history
-        ]
+        """Save survey results to JSON file with timestamp."""
+        from datetime import datetime
         
-        with open(self.save_path, 'w') as f:
+        # Create results with timestamp
+        timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
+        results = {
+            "timestamp": timestamp,
+            "responses": [
+                {"question": q, "answer": a} 
+                for q, a in self.conversation_history
+            ]
+        }
+        
+        # Ensure simulations directory exists
+        simulations_dir = self.save_path.parent / "simulations"
+        simulations_dir.mkdir(parents=True, exist_ok=True)
+        
+        # Create filename with timestamp
+        filename = f"survey_results_{timestamp}.json"
+        save_path = simulations_dir / filename
+        
+        # Save results
+        with open(save_path, 'w') as f:
             json.dump(results, f, indent=2)
 
     def is_complete(self) -> bool:
@@ -256,7 +272,8 @@ def test_api_connection(api_key: str) -> bool:
 
 if __name__ == "__main__":
     # Path for saving results
-    save_path = Path(__file__).parent / "survey_results.json"
+    base_path = Path(__file__).parent
+    save_path = base_path / "simulations" / "survey_results.json"
     
     # Load API key and test connection
     api_key = os.getenv('OPENROUTER_API_KEY')
